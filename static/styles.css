@@ -1,0 +1,121 @@
+/* https://www.scaler.com/topics/login-page-in-html/ */
+/* linear-gradient background */
+
+body 
+{
+  font-family:sans-serif; 
+  background: -webkit-linear-gradient(to right, #155799, #159957); 
+  background: linear-gradient(to right, #155799, #159957); 
+  color:whitesmoke;
+}
+
+h1{
+  text-align: center;
+}
+
+form{
+  width:15rem;
+  margin: auto;
+  color:whitesmoke;
+}
+input[type=text], input[type=password]{
+  width: 100%;
+  margin: 10px 0;
+  border-radius: 5px;
+  padding: 10px 13px;
+  box-sizing: border-box;
+}
+
+/* style the button according to the page */
+button {
+  background-color: #030804;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 5px;
+  margin: 7px 0;
+  width: 100%;
+  font-size: 18px;
+}
+button:hover {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+/* good translucent look */
+form{
+  width:16rem;
+  margin: auto;
+  color:whitesmoke;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(11, 15, 13, 0.582);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+.headingsContainer{
+  text-align: center;
+}
+.mainContainer{
+  padding: 16px;
+}
+
+/* elements inside the form have a little space between them and the form's extreme ends */
+
+.headingsContainer{
+  text-align: center;
+}
+.mainContainer{
+  padding: 16px;
+}
+
+/* For the sub-container, we need display: flex; */
+/* and the elements inside it need to be aligned in a row (flex-direction: row;).  */
+/* To center them vertically, align-items: center; will be used, and they should be put at both ends of the form, so justify-content: space-between; will be used. */
+.subcontainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.subcontainer a{
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+/* for stylings links Forgot Password and Register here!*/
+
+span.forgotpsd a {
+  float: right;
+  color: whitesmoke;
+  padding-top: 16px;
+}
+.forgotpsd a{
+  color: rgb(74, 146, 235);
+}
+.forgotpsd a:link{
+  text-decoration: none;
+}
+.register{
+  color: white;
+  text-align: center;
+}
+.register a{
+  color: rgb(74, 146, 235);
+}
+.register a:link{
+  text-decoration: none;
+}
+
+/* To make the page responsive */
+@media screen and (max-width: 600px) {
+  form{
+    width: 25rem;
+  }
+
+}
+@media screen and (max-width: 400px) {
+  form{
+    width: 20rem;
+  }
+}
+
