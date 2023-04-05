@@ -2,16 +2,23 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 )
 
 func main() {
-	// Define a handler function for the "/" route
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, World!")
-	})
+	const portNumber = ":8080"
+	mux := http.NewServeMux()
+	files := http.FileServer(http.Dir("./static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", files))
+
+	mux.HandleFunc("/", indexHandler)
+
+	server := &http.Server{
+		Addr:    "0.0.0.0:8080",
+		Handler: mux,
+	}
 
 	// Start the HTTP server and listen on port 8080
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Printf("Starting application on port %s", portNumber)
+	server.ListenAndServe()
 }

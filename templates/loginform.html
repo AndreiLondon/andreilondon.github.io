@@ -1,0 +1,37 @@
+{{ define "login" }}
+
+{{ template "header" }}
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<form action="/checkuserlogin" method="POST">
+    <label for="loginemail">Email:</label><br>
+    <input type="text" id="loginemail" name="loginemail"><br>
+    <label for="loginpswd">Password:</label><br>
+    <input type="password" id="loginpswd" name="loginpswd"><br><br>
+    <input type="submit" value="Submit">
+</form>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+{{ template "footer" }}
+
+{{ end }}
