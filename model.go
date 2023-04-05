@@ -2,7 +2,7 @@ package main
 
 type User struct {
 	ID       int
-	Email    string
 	Username string
+	Email    string
 	Password string
 }

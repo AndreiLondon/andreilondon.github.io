@@ -3,47 +3,44 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
-
-	"github.com/gorilla/securecookie"
 )
 
+// initialize the database
+// db, err := sql.Open("sqlite3", "./forum.db")
+// if err != nil {
+// 	log.Fatal(err)
+// }
+
+// defer db.Close()
 func main() {
-	const portNumber = ":8080"
-	mux := http.NewServeMux()
-	files := http.FileServer(http.Dir("./static"))
-	mux.Handle("/static/", http.StripPrefix("/static/", files))
-
-	mux.HandleFunc("/", indexHandler)
-
-	server := &http.Server{
-		Addr:    "0.0.0.0:8080",
-		Handler: mux,
+	dbLocal, err := sql.Open("sqlite3", "./forum.db")
+	if err != nil {
+		log.Fatal(err)
 	}
+	db = dbLocal
+	defer db.Close()
 
-	// Start the HTTP server and listen on port 8080
-	fmt.Printf("Starting application on port %s", portNumber)
-	server.ListenAndServe()
+	createUsersTable()
+
+	// Register the request handlers
+	// http.HandleFunc("/register", registerHandler)
+	// http.HandleFunc("/login", loginHandler)
+	// http.HandleFunc("/logout", logoutHandler)
+
+	// Serve the static files in the "static" directory
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
+	// start the server
+	fmt.Println("Listening on port 8080...")
+	http.ListenAndServe(":8080", nil)
 }
 
-func main() {
-	// Initialize database connection and cookie store
-	db, _ = sql.Open("sqlite3", "forum.db")
-	cookieStore = securecookie.New(cookieHashKey, cookieBlockKey)
-
-	// Initialize HTTP router
-	r := mux.NewRouter()
-
-	// Routes for user registration and login
-	r.HandleFunc("/register", registerHandler).Methods("POST")
-	r.HandleFunc("/login", loginHandler).Methods("POST")
-
-	// Routes for forum posts and comments (authentication required)
-	r.HandleFunc("/posts", postsHandler).Methods("GET")
-	r.HandleFunc("/posts", addPostHandler).Methods("POST")
-	r.HandleFunc("/posts/{id}/comments", commentsHandler).Methods("GET")
-	r.HandleFunc("/posts/{id}/comments", addCommentHandler).Methods("POST")
-
-	// Start HTTP server
-	http.ListenAndServe(":8080", r)
-}
+// func createTables() {
+// 	err := createUsersTable()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// }
