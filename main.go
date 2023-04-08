@@ -24,6 +24,11 @@ func main() {
 
 	createUsersTable()
 
+	http.HandleFunc("/", homeHandler)
+	http.HandleFunc("/register", registerHandler)
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/logout", logoutHandler)
+
 	// Register the request handlers
 	// http.HandleFunc("/register", registerHandler)
 	// http.HandleFunc("/login", loginHandler)
