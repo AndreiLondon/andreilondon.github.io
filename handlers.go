@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+var posts = []Post{}
+
 func signupHandler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/signup.html", "templates/header.html", "templates/footer.html")
 
@@ -39,10 +41,13 @@ func createpostHandler(w http.ResponseWriter, r *http.Request) {
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("templates/index.html", "templates/header.html", "templates/footer.html")
 
+	printPosts()
+
 	if err != nil {
 		fmt.Println(err)
 	}
-	t.ExecuteTemplate(w, "index", nil)
+
+	t.ExecuteTemplate(w, "index", posts)
 }
 func savePostHanlder(w http.ResponseWriter, r *http.Request) {
 
@@ -54,10 +59,15 @@ func savePostHanlder(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
 	text := r.FormValue("text")
 
-	// insertPost(*user, postContent, postCategories)
-	//insertPost(*user, title, text)
-	insertPost(title, text)
+	if title == "" || text == "" {
+		fmt.Fprintf(w, "Complete all rows")
+	} else {
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+		// insertPost(*user, postContent, postCategories)
+		//insertPost(*user, title, text)
+		insertPost(title, text)
+
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
 
 }

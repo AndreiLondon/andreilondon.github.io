@@ -27,7 +27,8 @@ func main() {
 	defer db.Close()
 	//dbRun()
 	createUsersTable()
-	// createPostsTable()
+	createPostsTable()
+	printPosts()
 
 	// Serve the static files in the "static" directory
 	fs := http.FileServer(http.Dir("./static"))

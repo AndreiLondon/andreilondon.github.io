@@ -17,18 +17,8 @@ var db *sql.DB
 
 func createUsersTable() error {
 
-	users_table := `CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY,
-        username TEXT NOT NULL UNIQUE,
-		email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL,
-		sessionID TEXT,
-		);`
-
-	statement, err := db.Prepare(users_table)
+	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, email TEXT NOT NULL UNIQUE, username TEXT NOT NULL UNIQUE, password TEXT NOT NULL, sessionId TEXT)")
 	if err != nil {
-		// fmt.Println(err)
-		// return
 		return err
 	}
 	defer statement.Close()
@@ -38,23 +28,17 @@ func createUsersTable() error {
 
 // We are passing db reference connection from main to our method with other parameters
 func insertUser(username string, email string, password string, sessionId string) error {
-	//log.Println("Inserting user record ...")
-	insertUser := `INSERT INTO users(username, email, password, sessionID) VALUES (?, ?, ?, ?)`
-	statement, err := db.Prepare(insertUser) // Prepare statement.
+	statement, err := db.Prepare("INSERT INTO users (email, username, password, sessionId) VALUES(?, ?, ?, ?)")
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
-	//defer statement.Close()
-	emailLowCase := strings.ToLower(email)
-	_, err = statement.Exec(emailLowCase, username, email, password)
+	defer statement.Close()
+	_, err = statement.Exec(strings.ToLower(email), username, password, sessionId)
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 	return nil
-	//defer statement.Close()
 }
 
 //Display user
@@ -88,7 +72,12 @@ func displayUsers() {
 		if err != nil {
 			log.Fatal(err)
 			//row.Scan(&username, &email, &password)
-			fmt.Println("User: ", user.Username, " ", user.Email, " ", user.Password)
 		}
+		fmt.Println("User: ", user.Username, " ", user.Email, " ", user.Password)
+	}
+	err = row.Err()
+	if err != nil {
+		log.Fatal(err)
+
 	}
 }

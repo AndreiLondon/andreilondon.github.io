@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"strings"
 	"time"
 )
 
@@ -10,14 +12,8 @@ import (
 //     |  INTEGER  |  INTEGER  |  INTEGER  |  TEXT     |  TEXT        |
 
 func createPostsTable() error {
-	posts_table := `CREATE TABLE IF NOT EXISTS posts (
-	id INTEGER PRIMARY KEY,
-	userid TEXT NOT NULL,
-	date INTEGER,
-	content TEXT,
-	categories TEXT,
-	);`
-	statement, err := db.Prepare(posts_table)
+	//statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, userid INTEGER NOT NULL, date INTEGER, content TEXT, categories TEXT)")
+	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, content TEXT, categories TEXT)")
 	if err != nil {
 		return err
 	}
@@ -28,19 +24,19 @@ func createPostsTable() error {
 
 // We are passing db reference connection from main to our method with other parameters
 // func insertPost(user User, postContent string, postCategories string) error {
-func insertPost(postContent string, postCategories string) error {
+func insertPost(title string, text string) error {
 	//log.Println("Inserting post record ...")
-	insertPost := `INSERT INTO posts(userid, date, content, categories) VALUES (?, ?, ?, ?)`
-	statement, err := db.Prepare(insertPost) // Prepare statement.
+	//statement, err := db.Prepare("INSERT INTO posts (userid, date, content, categories) VALUES(?, ?, ?, ?)") // Prepare statement.
+	statement, err := db.Prepare("INSERT INTO posts (content, categories) VALUES(?, ?)") // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
-	//defer statement.Close()
-	date := getCurrentMillisecods()
-	//_, err = statement.Exec(user.Id, date, postContent, postCategories)
-	_, err = statement.Exec(date, postContent, postCategories)
+	defer statement.Close()
+	// date := getCurrentMilliseconds()
+	// _, err = statement.Exec(user.Id, date, postContent, postCategories)
+	_, err = statement.Exec(title, text)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -50,7 +46,7 @@ func insertPost(postContent string, postCategories string) error {
 }
 
 // getCurrentMilliseconds retrieves the current time in milliseconds since the Unix epoch.
-func getCurrentMillisecods() int64 {
+func getCurrentMilliseconds() int64 {
 	// Get the current time as a Time value
 	now := time.Now()
 	// Convert the Time value to milliseconds by dividing UnixNano() by 1e6
@@ -63,4 +59,43 @@ func formatMilliseconds(date int64) string {
 	t := time.Unix(0, date*int64(time.Millisecond))
 	// Format the Time value using the desired format string "02-Jan-2006 15:04:05"
 	return t.Format("26-March-2020 13:30:30")
+}
+
+func printPosts() {
+	row, err := db.Query("SELECT * FROM posts")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer row.Close()
+	posts = []Post{}
+	//post := Post{}
+	for row.Next() {
+		var post Post
+		//var categories string
+		//err = rows.Scan(&(post.Id), &(post.Userid), &(post.Date), &(post.Content), &categories)
+		err = row.Scan(&(post.Id), &(post.Title), &(post.Text))
+		if err != nil {
+			log.Fatal(err)
+		}
+		// post.Categories = stringToSlice(categories, ",")
+		//fmt.Println("Post: ", post.Id, " ", post.Title, " ", post.Text)
+		posts = append(posts, post)
+	}
+	err = row.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func stringToSlice(data string, sep string) []string {
+	sl := strings.Split(data, sep)
+	result := []string{}
+
+	for _, str := range sl {
+		s := strings.TrimSpace(str)
+		if s != "" {
+			result = append(result, s)
+		}
+	}
+	return result
 }
