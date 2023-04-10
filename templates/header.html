@@ -1,0 +1,77 @@
+{{ define "header" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forum</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="static/styles.css">
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
+
+    li {
+      float: left;
+    }
+
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+      background-color: #111;
+    }
+
+    .active {
+      background-color: #04AA6D;
+    }
+
+    /* Add some margin to the body to account for the fixed navbar */
+    body {
+      margin-top: 50px;
+    }
+
+    /* Add some padding to the main content */
+    .main-content {
+      padding: 20px;
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <!-- Nav Bar -->
+
+  <ul>
+    <li><a href="/"><i class="fa fa-fw fa-home"></i> Home</a></li>
+    <li><a href="/createpost"><i class="fa fa-fw fa-pencil"></i>New Post</a></li>
+    <li><a href="#"><i class="fa fa-fw fa-microchip"></i>About Forum</a></li>
+    <li style="float:right"><a href="/login"><i class="fa fa-fw fa-user"></i>Login</a></li>
+  </ul>
+
+  <div class="main-content">
+    <!-- Content goes here -->
+  </div>
+
+{{end}}

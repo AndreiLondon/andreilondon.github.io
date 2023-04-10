@@ -1,0 +1,22 @@
+{{ define "createpost" }}  
+{{ template "header" }}
+
+<main role="main" class="">
+    <h1 class="">Post Form</h1>
+    <form action="savepost" method="POST">
+        <li>
+            <ul>
+                Categories
+                Title
+                Text
+            </ul>
+        </li>
+        <!-- <input type="text" name="title" id="title" placeholder="Write the name of the Post" class=""><br> -->
+        <textarea name="title" id="title" cols="30" rows="2" class="" placeholder="Write the title"></textarea><br>
+        <textarea name="text" id="text" cols="30" rows="5" class="" placeholder="Write you text here"></textarea><br>
+        <button xlass="btn btn-warning">Add Post</button>
+    </form>
+</main>
+
+{{ template "footer" }}
+{{ end }}
