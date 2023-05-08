@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="main">
+        {{if .SignIn}}
+        <input type="checkbox" id="chk" aria-hidden="true" checked>
+        {{else}}
+        <input type="checkbox" id="chk" aria-hidden="true" unchecked>
+        {{end}}
+
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+            <form action="/signup" method="POST">
+            </formaction>
+            <label for="chk" aria-hidden="true">Sign Up</label>
+            {{if .SignUp}}
+            <div class="warning-message">Username or email invalid or already exists</div>
+            {{end}}
+            <input type="text" name="signup_username" placeholder="Username" required="">
+            <input type="email" name="signup_email" placeholder="Email" required=""> 
+            <input type="password" name="signup_password" placeholder="Password" required="">
+            <button>Sign Up</button>
+            
+<!-- </formaction> 
+is an HTML tag that is used in conjunction with the <button> element 
+to specify the URL of the server-side script that will process the form data 
+when the button is clicked. 
+The formaction attribute is used to override 
+the action attribute of the <form> element. -->
+
+            </form>
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>

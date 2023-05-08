@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"html/template"
 	"net/http"
 )
 
@@ -35,6 +36,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/sign", signupHandler)
 	http.HandleFunc("/signup", signupHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/createpost", createpostHandler)
@@ -44,4 +46,14 @@ func main() {
 	fmt.Println("Listening on port 8080...")
 	http.ListenAndServe(":8080", nil)
 
+}
+
+func showError(w http.ResponseWriter, code int, message string) {
+	templ, err := template.ParseFiles("templates/error.html")
+	w.WriteHeader(code)
+	if err != nil {
+		fmt.Fprint(w, "500 Internal Server Error")
+		return
+	}
+	templ.Execute(w, message)
 }

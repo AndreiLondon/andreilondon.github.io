@@ -27,3 +27,8 @@ type Post struct {
 	Title string
 	Text  string
 }
+
+type SingCredentials struct {
+	SignIn bool
+	SignUp bool
+}
