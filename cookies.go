@@ -4,22 +4,23 @@ import (
 	"net/http"
 )
 
-var SESSION_ID = "SESSION_ID"
-
+// Function sets sessionId as coockie
 func setCookie(w http.ResponseWriter, sessionId string) {
-
-	ck := http.Cookie{
+	// create a new cookie
+	cookie := http.Cookie{
 		Name:   SESSION_ID,
 		Value:  sessionId,
-		MaxAge: 1000 * 60 * 5,
+		MaxAge: 3600,
 	}
-	http.SetCookie(w, &ck)
+	// set the cookie in the response header which will be sent to the client
+	http.SetCookie(w, &cookie)
 }
 
+// Function gets sessionId from cookies
 func getCookie(r *http.Request) string {
-	tokenCookie, err := r.Cookie(SESSION_ID)
+	cookieValue, err := r.Cookie(SESSION_ID)
 	if err != nil {
 		return ""
 	}
-	return tokenCookie.Value
+	return cookieValue.Value
 }

@@ -41,6 +41,31 @@ func insertUser(username string, email string, password string, sessionId string
 	return nil
 }
 
+//Check the user
+
+func checkUser(email string, password string) (*User, error) {
+	rows, err := db.Query("SELECT * FROM users WHERE email = ?", email)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		user := User{}
+		err = rows.Scan(&(user.Id), &(user.Email), &(user.Username), &(user.Password), &(user.Sessionid))
+		if err != nil {
+			return nil, err
+		}
+		if compairPasswords(user.Password, password) {
+			return &user, nil
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
+}
+
 //Display user
 
 // getting data from table
@@ -60,7 +85,7 @@ func displayUsers() {
 	*/
 	for row.Next() { // Iterate and fetch the records from result cursor
 		user := User{}
-		err = row.Scan(&(user.Id), &(user.Email), &(user.Username), &(user.Password), &(user.SessionId))
+		err = row.Scan(&(user.Id), &(user.Email), &(user.Username), &(user.Password), &(user.Sessionid))
 		/*
 		   Inside the loop, a User struct is created to store the data of the current row.
 		   The row.Scan() method is used to scan the values from the current row into
@@ -70,14 +95,69 @@ func displayUsers() {
 		   column values from the current row are scanned.
 		*/
 		if err != nil {
-			log.Fatal(err)
+			//log.Fatal(err)
 			//row.Scan(&username, &email, &password)
+			return
 		}
 		fmt.Println("User: ", user.Username, " ", user.Email, " ", user.Password)
 	}
 	err = row.Err()
 	if err != nil {
-		log.Fatal(err)
-
+		//log.Fatal(err)
+		return
 	}
+}
+
+//Set SesioniD
+
+func setSessionId(user *User, sessionId string) error {
+	statement, err := db.Prepare("UPDATE users SET sessionId = ? WHERE id = ?")
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+	_, err = statement.Exec(sessionId, user.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Reset Session
+
+func resetSessionId(sessionId string) error {
+	statement, err := db.Prepare("UPDATE users SET sessionId = ? WHERE sessionId = ?")
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+	_, err = statement.Exec("", sessionId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func getUserBySessionId(sessionId string) *User {
+	if strings.TrimSpace(sessionId) == "" {
+		return nil
+	}
+	rows, err := db.Query("SELECT * FROM users WHERE sessionId = ? LIMIT 1", sessionId)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+	var user *User = nil
+	for rows.Next() {
+		user = &User{}
+		err = rows.Scan(&(user.Id), &(user.Email), &(user.Username), &(user.Password), &(user.Sessionid))
+		if err != nil {
+			return nil
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil
+	}
+	return user
 }
