@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// Function sets sessionId as coockie
+// Function sets sessionId as a coockie
 func setCookie(w http.ResponseWriter, sessionId string) {
 	// create a new cookie
 	cookie := http.Cookie{

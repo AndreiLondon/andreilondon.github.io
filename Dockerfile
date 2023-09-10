@@ -1,7 +1,9 @@
 FROM golang:1.19
 LABEL vesion="1.0"
 LABEL maintaner="Aliaksei Vidaseu and Andrei Martynenko"
-LABEL description="Project is a forum. We can register, log in, save post, make comment on post, like or dislike posts and comments, filter posts"
+LABEL description="Project Forum"
+# "Project is a forum. We can register,log in, save post, 
+# make comment on post, like or dislike posts and comments, filter posts"
 LABEL port="8080"
 WORKDIR /app
 COPY go.mod ./

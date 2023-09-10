@@ -5,7 +5,7 @@ package main
 //    |  INTEGER  |  INTEGER  |  INTEGER  |  INTEGER  |
 
 // create post_likes table
-func createPostLikesTable() error {
+func creratePostLikesTable() error {
 	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS post_likes(id INTEGER PRIMARY KEY, userid INTEGER NOT NULL, postid INTEGER NOT NULL, status INTEGER NOT NULL CHECK(status = 1 OR status = 0 OR status = -1))")
 	if err != nil {
 		return err
@@ -14,7 +14,6 @@ func createPostLikesTable() error {
 	statement.Exec()
 	return nil
 }
-
 func updatePostLikes(user *User, postId int, status int) {
 	//Check if user tryes to like own post
 	rows, err := db.Query("SELECT * FROM posts WHERE id = ? AND userid = ?", postId, user.Id)

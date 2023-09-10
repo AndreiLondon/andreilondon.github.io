@@ -9,53 +9,35 @@ import (
 	"strings"
 )
 
-//var db *sql.DB
-
-// func dbRun() {
-// 	createUsersTable()
-// 	createPostsTable()
-
-// }
-
 var invalidCredentialsFlagSignUp = ""
 var invalidCredentialsFlagSignIn = ""
 var emptyPostFlag = false
 var emptyCommentFlag = false
-var SHAW_ALL = "Shaw All"
-var currentMode = SHAW_ALL
 var SESSION_ID = "SESSION_ID"
 var filterCategories = []string{}
-var MY_LIKES = "My Likes"
+var SHAW_ALL = "Shaw All"
 var MY_POSTS = "My Posts"
 var MY_COMMENTS = "My Comments"
+var MY_LIKES = "My Likes"
+var currentMode = SHAW_ALL
 
 func main() {
-
-	// initialize the database
-
 	dbLocal, err := sql.Open("sqlite3", "./forum.db")
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 	}
 	db = dbLocal
 	defer db.Close()
-	//dbRun()
-	// createUsersTable()
-	// createPostsTable()
-	// printPosts()
 	createTables()
-	// Serve the static files in the "static" directory
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/sign", signHandler)
-	http.HandleFunc("/signup", signUpHandler)
+	http.HandleFunc("/signup", signupHandler)
 	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/signout", signOutHandler)
+	http.HandleFunc("/signout", signoutHandler)
 	http.HandleFunc("/post", postHandler)
-	http.HandleFunc("/savepost", savePostHandler)
-	http.HandleFunc("/createpost", createpostHandler)
+	http.HandleFunc("/savepost", savepostHandler)
 	http.HandleFunc("/registerlike", registerlikeHandler)
 	http.HandleFunc("/registercommentlike", registercommentlikeHandler)
 	http.HandleFunc("/comment", commentHandler)
@@ -63,14 +45,11 @@ func main() {
 	http.HandleFunc("/setfilter", setfilterHandler)
 	http.HandleFunc("/removefilter", removefilterHandler)
 	http.HandleFunc("/changemode", changemodeHandler)
-
-	// start the server
-	fmt.Println("Listening on port 8080...")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Server start at port :9000")
+	http.ListenAndServe(":9000", nil)
 }
-
 func createTables() {
-	err := createUsersTable()
+	err := crerateUsersTable()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,24 +63,23 @@ func createTables() {
 			log.Fatal(err)
 		}
 	}
-	err = createPostsTable()
+	err = creratePostsTable()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = createCommentsTable()
+	err = crerateCommentsTable()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = createPostLikesTable()
+	err = creratePostLikesTable()
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = createCommentLikesTable()
+	err = crerateCommentLikesTable()
 	if err != nil {
 		log.Fatal(err)
 	}
 }
-
 func showError(w http.ResponseWriter, code int, message string) {
 	templ, err := template.ParseFiles("templates/error.html")
 	w.WriteHeader(code)

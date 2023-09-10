@@ -7,7 +7,7 @@ import "fmt"
 //      |  INTEGER  |  INTEGER  |  INTEGER  |  INTEGER  |  TEXT     |
 
 // Create comments table
-func createCommentsTable() error {
+func crerateCommentsTable() error {
 	statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY, date INTEGER NOT NULL, userid INTEGER NOT NULL, postid INTEGER NOT NULL, content TEXT NOT NULL)")
 	if err != nil {
 		return err

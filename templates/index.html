@@ -1,77 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/styles.css">
-    <script src="/static/js/index.js"></script>
-    <title>Forum</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-    <style>
-        body {
-            margin: 0;
-        }
-
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #333;
-            position: fixed;
-            top: 0;
-            width: 100%;
-        }
-
-        li {
-            float: left;
-        }
-
-        li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-        }
-
-        li a:hover:not(.active) {
-            background-color: #111;
-        }
-
-        .active {
-            background-color: #04AA6D;
-        }
-
-        /* Add some margin to the body to account for the fixed navbar */
-        body {
-            margin-top: 50px;
-        }
-
-        /* Add some padding to the main content */
-        .main-content {
-            padding: 20px;
-        }
-    </style>
-
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <script src="/static/js/index.js"></script>
+  <title>Forum</title>
 </head>
-
 <body>
-    <!-- Nav Bar -->
-    <ul>
-        <li><a href="/"><i class="fa fa-fw fa-home"></i> Home</a></li>
-        <li><a href="/createpost"><i class="fa fa-fw fa-pencil"></i>New Post</a></li>
-        <li><a href="#"><i class="fa fa-fw fa-microchip"></i>About Forum</a></li>
-        <li style="float:right"><a href="/login"><i class="fa fa-fw fa-user"></i>Login</a></li>
-    </ul>
-
-    {{ $User := .User }}
-    <div class="action-bar">
-        <div class="user-actions">
-            {{if .User}}
+   
+  {{ $User := .User }}
+  <div class="action-bar">
+    <div class="user-actions">
+       {{if .User}}       
             <div class="new-post">
                 <form action="/post">
                     <input type="image" src="/static/images/new_post_icon.png" alt="New Post" width="24" height="24">
@@ -79,204 +21,175 @@
             </div>
             <select class="select_mode" onchange="changeMode(event)">
                 {{if eq .Mode "Shaw All"}}
-                <option value="Shaw All" selected>Shaw All</option>
+                    <option value="Shaw All" selected>Shaw All</option>
                 {{else}}
-                <option value="Shaw All">Shaw All</option>
-                {{end}}
-
+                    <option value="Shaw All">Shaw All</option>
+                {{end}}               
+               
                 {{if eq .Mode "My Posts"}}
-                <option value="My Posts" selected>My Posts</option>
+                    <option value="My Posts" selected>My Posts</option>
                 {{else}}
-                <option value="My Posts">My Posts</option>
+                    <option value="My Posts">My Posts</option>
                 {{end}}
                 {{if eq .Mode "My Comments"}}
-                <option value="My Comments" selected>My Comments</option>
+                    <option value="My Comments" selected>My Comments</option>
                 {{else}}
-                <option value="My Comments">My Comments</option>
+                    <option value="My Comments">My Comments</option>
                 {{end}}
                 {{if eq .Mode "My Likes"}}
-                <option value="My Likes" selected>My Likes</option>
+                    <option value="My Likes" selected>My Likes</option>
                 {{else}}
-                <option value="My Likes">My Likes</option>
+                    <option value="My Likes">My Likes</option>
                 {{end}}
-            </select>
-            {{end}}
-        </div>
-
-        <div class="user-info">
-            {{if .User}}
-            <div class="welcome-message"> {{.User.Username}}</div>
-            {{end}}
-
-            {{if not .User}}
+            </select>             
+       {{end}}      
+    </div>
+    
+    <div class="user-info">
+        {{if .User}}   
+            <div class="welcome-message"> {{.User.Username}}</div>   
+        {{end}}
+    
+        {{if not .User}}   
             <div class="sign-in-image">
                 <form action="/sign">
                     <input type="image" src="/static/images/user_icon.png" alt="SignIn/SignUp" width="24" height="24">
                 </form>
             </div>
-            {{else}}
-            <div class="sign-in-image">
-                <img src="/static/images/user_icon.png" alt="User" width="24" height="24">
+        {{else}}
+            <div class="sign-in-image">            
+                    <img src="/static/images/user_icon.png" alt="User" width="24" height="24">           
             </div>
-            {{end}}
-
-            {{if .User}}
+        {{end}}
+    
+        {{if .User}}   
             <div class="exit-image">
                 <form action="/signout">
                     <input type="image" src="/static/images/exit_icon.png" alt="Sign Out" width="24" height="24">
                 </form>
             </div>
-            {{end}}
-        </div>
-    </div>
-    <div id="filter-list">
-        {{range .Filters}}
+        {{end}}       
+    </div> 
+</div>
+<div id="filter-list">
+    {{range .Filters}}  
         <form action="removefilter" method="POST">
-            <input type="hidden" value="{{.}}" name="filterCategory">
+            <input type="hidden"  value="{{.}}" name="filterCategory">
             <input class="selected_category" type="submit" value="{{.}}">
         </form>
-        {{end}}
-    </div>
-    {{ if eq (len .Posts) 0 }}
+   {{end}}
+</div>
+{{ if eq (len .Posts) 0 }}
     <div class="no_data">Nothing to display</div>
-    {{else}}
+{{else}}
     {{range .Posts}}
-    <div class="post-container">
-        <div class="post-header">
-            <div> {{.Username}} </div>
-            <div> {{.DateFormat}} </div>
-        </div>
-        <div class="post-content">
-            <div> {{.Content}} </div>
-        </div>
-        {{if not $User}}
-        <div class="post-options">
-            <div class="disabled">{{.Likes}}</div> <input class="disabled" type="image"
-                src="/static/images/like_inactive_icon.png" alt="Like Post" width="16" height="16">
-            <div class="disabled">{{.Dislikes}}</div> <input class="disabled" type="image"
-                src="/static/images/dislike_inactive_icon.png" alt="Dislike Post" width="16" height="16">
-        </div>
-        {{else if eq $User.Username .Username}}
-        <div class="post-options">
-            <div class="disabled">{{.Likes}}</div> <input class="disabled" type="image"
-                src="/static/images/like_inactive_icon.png" alt="Like Post" width="16" height="16">
-            <div class="disabled">{{.Dislikes}}</div> <input class="disabled" type="image"
-                src="/static/images/dislike_inactive_icon.png" alt="Dislike Post" width="16" height="16">
-        </div>
-        {{else}}
-        <div class="post-options">
-            <form class="comment-post-icon" method="POST" action="/comment">
-                <input type="image" src="/static/images/new_post_icon.png" alt="Comment Post" width="16" height="16">
-                <input type="hidden" value="{{.Id}}" name="postId">
-            </form>
-            {{if eq .Status -1}}
-            <div class="like_count">{{.Likes}}</div>
-            <input id="like_{{.Id}}" class="likes" type="image" src="/static/images/like_inactive_icon.png"
-                alt="Like Post" width="16" height="16" onclick="likeHandler(this.id)">
-            <div class="dislike_count">{{.Dislikes}}</div>
-            <input id="dislike_{{.Id}}" class="dislikes" type="image" src="/static/images/dislike_active_icon.png"
-                alt="Dislike Post" width="16" height="16" onclick="likeHandler(this.id)">
-            {{else if eq .Status 1}}
-            <div class="like_count">{{.Likes}}</div>
-            <input id="like_{{.Id}}" class="likes" type="image" src="/static/images/like_active_icon.png"
-                alt="Like Post" width="16" height="16" onclick="likeHandler(this.id)">
-            <div class="dislike_count">{{.Dislikes}}</div>
-            <input id="dislike_{{.Id}}" class="dislikes" type="image" src="/static/images/dislike_inactive_icon.png"
-                alt="Dislike Post" width="16" height="16" onclick="likeHandler(this.id)">
-            {{else}}
-            <div class="like_count">{{.Likes}}</div>
-            <input id="like_{{.Id}}" class="likes" type="image" src="/static/images/like_inactive_icon.png"
-                alt="Like Post" width="16" height="16" onclick="likeHandler(this.id)">
-            <div class="dislike_count">{{.Dislikes}}</div>
-            <input id="dislike_{{.Id}}" class="dislikes" type="image" src="/static/images/dislike_inactive_icon.png"
-                alt="Dislike Post" width="16" height="16" onclick="likeHandler(this.id)">
-            {{end}}
-        </div>
-        {{end}}
-
-
-        {{if ne (len .Categories) 0}}
-        <div class="post-footer">
-            {{range .Categories}}
-            <form action="setfilter" method="POST">
-                <input type="hidden" value="{{.}}" name="filterCategory">
-                <input class="selected_category" type="submit" value="{{.}}">
-            </form>
-            {{end}}
-        </div>
-        {{end}}
-
-
-        <div class="comments-container">
-            {{range .Comments}}
-            <div class="comment">
-                <div class="comment-header">
-                    {{.Username}}
-                    {{.DateFormat}}
-                </div>
-                <div class="comment-body">
-                    {{.Content}}
-                </div>
-                <div class="comment-footer">
-                    {{if not $User}}
-                    <div class="post-options">
-                        <div class="comment_likes_count_disabled">{{.Likes}}</div> <input class="disabled" type="image"
-                            src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14">
-                        <div class="comment_likes_count_disabled">{{.Dislikes}}</div> <input class="disabled"
-                            type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14"
-                            height="14">
-                    </div>
-                    {{else if eq $User.Id .Userid}}
-                    <div class="post-options">
-                        <div class="comment_likes_count_disabled">{{.Likes}}</div> <input class="disabled" type="image"
-                            src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14">
-                        <div class="comment_likes_count_disabled">{{.Dislikes}}</div> <input class="disabled"
-                            type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14"
-                            height="14">
-                    </div>
-                    {{else}}
-                    {{if eq .Status -1}}
-                    <div class="post-options">
-                        <div class="comment_like_count">{{.Likes}}</div>
-                        <input class="likes" id="comment-like_{{.Id}}" type="image"
-                            src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14"
-                            onclick="commentLikeHandler(this.id)">
-                        <div class="comment_dislike_count">{{.Dislikes}}</div>
-                        <input class="dislikes" id="comment-dislike_{{.Id}}" type="image"
-                            src="/static/images/dislike_active_icon.png" alt="Dislike Comment" width="14" height="14"
-                            onclick="commentLikeHandler(this.id)">
-                    </div>
-                    {{else if eq .Status 1}}
-                    <div class="post-options">
-                        <div class="comment_like_count">{{.Likes}}</div>
-                        <input class="likes" id="comment-like_{{.Id}}" type="image"
-                            src="/static/images/like_active_icon.png" alt="Like Comment" width="14" height="14"
-                            onclick="commentLikeHandler(this.id)">
-                        <div class="comment_dislike_count">{{.Dislikes}}</div>
-                        <input class="dislikes" id="comment-dislike_{{.Id}}" type="image"
-                            src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14" height="14"
-                            onclick="commentLikeHandler(this.id)">
-                    </div>
-                    {{else}}
-                    <div class="post-options">
-                        <div class="comment_like_count">{{.Likes}}</div>
-                        <input class="likes" id="comment-like_{{.Id}}" type="image"
-                            src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14"
-                            onclick="commentLikeHandler(this.id)">
-                        <div class="comment_dislike_count">{{.Dislikes}}</div>
-                        <input class="dislikes" id="comment-dislike_{{.Id}}" type="image"
-                            src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14" height="14"
-                            onclick="commentLikeHandler(this.id)">
-                    </div>
-                    {{end}}
-                    {{end}}
-                </div>
+        <div class="post-container">
+            <div class="post-header">
+                <div> {{.Username}} </div>
+                <div> {{.DateFormat}} </div>               
             </div>
+            <div class="post-content">
+                <div> {{.Content}} </div>             
+            </div>       
+            {{if not $User}}
+                <div class="post-options">                
+                    <div class="disabled">{{.Likes}}</div> <input class="disabled" type="image" src="/static/images/like_inactive_icon.png" alt="Like Post" width="16" height="16">
+                    <div class="disabled">{{.Dislikes}}</div> <input class="disabled" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Post" width="16" height="16">
+                </div>        
+            {{else if eq $User.Username .Username}}
+                <div class="post-options">                
+                    <div class="disabled">{{.Likes}}</div> <input class="disabled" type="image" src="/static/images/like_inactive_icon.png" alt="Like Post" width="16" height="16">
+                    <div class="disabled">{{.Dislikes}}</div> <input class="disabled" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Post" width="16" height="16">
+                </div>
+            {{else}}       
+                    <div class="post-options">
+                        <form class="comment-post-icon" method="POST" action="/comment">
+                            <input type="image" src="/static/images/new_post_icon.png" alt="Comment Post" width="16" height="16">
+                            <input type="hidden" value="{{.Id}}" name="postId">                  
+                        </form> 
+                        {{if eq .Status -1}}
+                            <div class="like_count">{{.Likes}}</div>
+                            <input id="like_{{.Id}}" class="likes" type="image" src="/static/images/like_inactive_icon.png" alt="Like Post" width="16" height="16" onclick="likeHandler(this.id)">
+                            <div class="dislike_count">{{.Dislikes}}</div>
+                            <input id="dislike_{{.Id}}" class="dislikes" type="image" src="/static/images/dislike_active_icon.png" alt="Dislike Post" width="16" height="16" onclick="likeHandler(this.id)">
+                        {{else if eq .Status 1}}
+                            <div class="like_count">{{.Likes}}</div>
+                            <input id="like_{{.Id}}" class="likes" type="image" src="/static/images/like_active_icon.png" alt="Like Post" width="16" height="16" onclick="likeHandler(this.id)">
+                            <div class="dislike_count">{{.Dislikes}}</div>
+                            <input id="dislike_{{.Id}}" class="dislikes" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Post" width="16" height="16" onclick="likeHandler(this.id)">
+                        {{else}}    
+                            <div class="like_count">{{.Likes}}</div>
+                            <input id="like_{{.Id}}" class="likes" type="image" src="/static/images/like_inactive_icon.png" alt="Like Post" width="16" height="16" onclick="likeHandler(this.id)">
+                            <div class="dislike_count">{{.Dislikes}}</div>
+                            <input id="dislike_{{.Id}}" class="dislikes" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Post" width="16" height="16" onclick="likeHandler(this.id)">
+                        {{end}}
+                    </div>
             {{end}}
+    
+        
+            {{if ne (len .Categories) 0}}
+                <div class="post-footer">
+                        {{range .Categories}}                                      
+                            <form action="setfilter" method="POST">                       
+                            <input type="hidden" value="{{.}}" name="filterCategory">
+                            <input class="selected_category" type="submit" value="{{.}}">
+                            </form>
+                        {{end}}                          
+                </div>
+            {{end}}
+            
+            
+                <div class="comments-container">
+                {{range .Comments}}   
+                    <div class="comment">
+                        <div class="comment-header">
+                            {{.Username}}
+                            {{.DateFormat}}
+                        </div>
+                        <div class="comment-body">
+                            {{.Content}}                       
+                        </div>
+                        <div class="comment-footer">
+                            {{if not $User}}
+                                <div class="post-options">                
+                                    <div class="comment_likes_count_disabled">{{.Likes}}</div> <input class="disabled" type="image" src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14">
+                                    <div class="comment_likes_count_disabled">{{.Dislikes}}</div> <input class="disabled" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14" height="14">
+                                </div>                         
+                            {{else if eq $User.Id .Userid}}                                           
+                                <div class="post-options">                
+                                    <div class="comment_likes_count_disabled">{{.Likes}}</div> <input class="disabled" type="image" src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14">
+                                    <div class="comment_likes_count_disabled">{{.Dislikes}}</div> <input class="disabled" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14" height="14">
+                                </div>
+                            {{else}}
+                                {{if eq .Status -1}}
+                                    <div class="post-options">
+                                        <div class="comment_like_count">{{.Likes}}</div>
+                                        <input class="likes" id="comment-like_{{.Id}}" type="image" src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14" onclick="commentLikeHandler(this.id)">
+                                        <div class="comment_dislike_count">{{.Dislikes}}</div>
+                                        <input class="dislikes" id="comment-dislike_{{.Id}}" type="image" src="/static/images/dislike_active_icon.png" alt="Dislike Comment" width="14" height="14" onclick="commentLikeHandler(this.id)">
+                                    </div>
+                                {{else if eq .Status 1}}    
+                                    <div class="post-options">
+                                        <div class="comment_like_count">{{.Likes}}</div>
+                                        <input class="likes" id="comment-like_{{.Id}}" type="image" src="/static/images/like_active_icon.png" alt="Like Comment" width="14" height="14" onclick="commentLikeHandler(this.id)">
+                                        <div class="comment_dislike_count">{{.Dislikes}}</div>
+                                        <input class="dislikes" id="comment-dislike_{{.Id}}" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14" height="14" onclick="commentLikeHandler(this.id)">
+                                    </div>                                   
+                                {{else}}
+                                    <div class="post-options">
+                                        <div class="comment_like_count">{{.Likes}}</div>
+                                        <input class="likes" id="comment-like_{{.Id}}" type="image" src="/static/images/like_inactive_icon.png" alt="Like Comment" width="14" height="14" onclick="commentLikeHandler(this.id)">
+                                        <div class="comment_dislike_count">{{.Dislikes}}</div>
+                                        <input class="dislikes" id="comment-dislike_{{.Id}}" type="image" src="/static/images/dislike_inactive_icon.png" alt="Dislike Comment" width="14" height="14" onclick="commentLikeHandler(this.id)">
+                                    </div>                                   
+                                {{end}}                    
+                            {{end}}                   
+                        </div>                
+                    </div>
+                {{end}}
+                </div>
         </div>
-    </div>
-    {{end}}
-    {{end}}
+    {{end}}  
+{{end}}      
 </body>
-
 </html>

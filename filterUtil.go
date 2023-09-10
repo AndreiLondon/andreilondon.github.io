@@ -13,7 +13,6 @@ func filterByCategories(posts []Post, filterCategories []string) []Post {
 	}
 	return result
 }
-
 func filterByMode(posts []Post, mode string, user *User) []Post {
 	if user == nil {
 		return posts

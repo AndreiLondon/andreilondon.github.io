@@ -2,7 +2,7 @@ package main
 
 import "strings"
 
-// Covert string into slice
+//Covert string into slice
 func stringToSlice(data string, sep string) []string {
 	splittedStr := strings.Split(data, sep)
 	result := []string{}
@@ -16,8 +16,8 @@ func stringToSlice(data string, sep string) []string {
 	return result
 }
 
-// Return true if all element of filter are present in arr
-// (should I range through the filter and arr the other way round?)
+//Return true if all element of filter are present in arr 
+//(should I range through the filter and arr the other way round?)
 func containsArr(filter []string, arr []string) bool {
 	for _, item := range filter {
 		for _, element := range arr {
@@ -29,7 +29,7 @@ func containsArr(filter []string, arr []string) bool {
 	return false
 }
 
-// Return true if str is present in arr
+//Return true if str is present in arr
 func contains(arr []string, str string) bool {
 	for _, item := range arr {
 		if item == str {

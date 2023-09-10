@@ -1,17 +1,17 @@
 package main
 
 import (
-	//"github.com/gofrs/uuid"
 	"github.com/google/uuid"
 )
 
+/*
+A UUID – that's short for Universally Unique IDentifier,
+by the way – is a 36-character alphanumeric string that can be used to identify information
+(such as a table row).
+*/
+
+// generate a new session ID using either a UUID (if it is generated successfully)
+// or a combination of the current time in milliseconds and a random integer (if the UUID generation fails)
 func generateSessionId() string {
-	// u2, err := uuid.NewV4()
-	// if err != nil {
-	// 	milli := getCurrentMilli()
-	// 	rand.Seed(milli)
-	// 	sessionId := fmt.Sprintf("%d-%d", milli, rand.Intn(10000000))
-	// 	return sessionId
-	// }
 	return uuid.New().String()
 }
