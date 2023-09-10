@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Forum | Sign In </title>
+    <link rel="stylesheet" type="text/css" href="/static/css/sign.css">
+    <link rel="shortcut icon" type="image/x-icon" href="static/images/01.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main">
+        {{if ne .SignIn ""}}
+        <input type="checkbox" id="chk" aria-hidden="true" checked>
+        {{else}}
+        <input type="checkbox" id="chk" aria-hidden="true" unchecked>
+        {{end}}
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+            <form action="/signup" method="POST">
+                </formaction>
+                <label for="chk" aria-hidden="true">Sign up</label>
+                {{if ne .SignUp ""}} <div class="warning-message">{{.SignUp}}</div> {{end}}
+                <input type="text" name="signup_username" placeholder="User name" required="">
+                <input type="email" name="signup_email" placeholder="Email" required="">
+                <input type="password" name="signup_password" placeholder="Password" required="">
+                <button>Sign up</button>
+            </form>
+        </div>
+        <div class="login">
+            <form action="/login" method="POST" autocomplete="off">
+                </formaction>
+                <label for="chk" aria-hidden="true">Login</label>
+                {{if ne .SignIn ""}} <div class="warning-message">{{.SignIn}}</div> {{end}}
+                <input type="email" name="login_email" placeholder="Email" required="">
+                <input type="password" name="login_password" placeholder="Password" required="">
+                <button>Log in</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

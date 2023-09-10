@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/css/styles.css">
+  <script src="static/js/post.js"></script>
+  <title>Forum | Comment Post</title>
+</head>
+<body>
+       <div class="action-bar">
+        <div class="user-actions">
+            <a href="/"><img class="back-button" src="/static/images/back_icon.png" alt="Back to main page" width="24px" height="24px"></a>
+        </div>
+        <div class="user-info">
+            {{if .User}}          
+                <div class="welcome-message"> {{.User.Username}}</div>   
+                {{end}}
+                {{if not .User}}               
+                <div class="sign-in-image">
+                    <form action="/sign">
+                        <input type="image" src="user_icon.png" alt="SignIn/SignUp" width="24" height="24">
+                    </form>
+                </div>
+                {{else}}                
+                <div class="sign-in-image">            
+                        <img src="/static/images/user_icon.png" alt="User" width="24" height="24">           
+                </div>
+                {{end}}
+        
+                {{if .User}}             
+                <div class="exit-image">
+                    <form action="/signout">
+                        <input type="image" src="/static/images/exit_icon.png" alt="Sign Out" width="24" height="24">
+                    </form>
+                </div>
+                {{end}}       
+        </div>
+    </div>
+    <div class="new-comment-form-container">
+        <form action="/commentsubmit" method="POST" >
+            {{if .EmptyComment}}
+            <div class="warning-message">Add content to comment</div>
+            {{end}}
+            <div class="new-comment-container">        
+                <div class="new-comment-header">
+                    <div>
+                        ADD COMMENT
+                    </div>
+                    <div>
+                        {{.Post.Username}}
+                        {{.Post.DateFormat}}                      
+                    </div>
+                </div>
+                <div class="new-comment-original-post">
+                    <textarea  disabled> {{.Post.Content}}</textarea>
+                </div>       
+            
+                <div class="new-comment-content">
+                    <textarea id="new-comment-content" placeholder="Type Comment Here ..." name="comment"></textarea>
+                </div>    
+            </div>
+            <input type="hidden" value="{{.Post.Id}}" name="postId">
+            <input class="submit-button" type="submit" value="ADD COMMENT">
+        </form>
+    </div>
+    <script>
+    window.onload = function() {
+        document.getElementById("new-comment-content").focus();
+    }
+    </script>
+</body>
+</html>
